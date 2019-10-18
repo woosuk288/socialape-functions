@@ -5,7 +5,6 @@ const isEmail = email => {
 };
 
 const isEmpty = string => {
-  console.log('string : ',string)
   if (string.trim() === "") return true;
   else return false;
 };
@@ -39,4 +38,17 @@ exports.validateLoginData = data => {
     errors,
     valid: Object.keys(errors).length === 0 ? true : false
   };
-}
+};
+
+exports.reduceUserDetails = data => {
+  let userDetails = {};
+  if (!isEmpty(data.bio)) userDetails.bio = data.bio;
+  if (!isEmpty(data.website)) {
+    if (data.website.substring(0, 4) !== "http")
+      userDetails.website = `http://${data.website.trim()}`;
+    else userDetails.website = data.website;
+  }
+  if (!isEmpty(data.location)) userDetails.location = data.location;
+
+  return userDetails;
+};

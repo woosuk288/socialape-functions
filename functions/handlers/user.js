@@ -5,8 +5,13 @@ const config = require("../util/config");
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
-const { validateSignupData, validateLoginData } = require("../util/validators");
+const {
+  validateSignupData,
+  validateLoginData,
+  reduceUserDetails
+} = require("../util/validators");
 
+// Sign users up
 exports.signup = (req, res) => {
   const newUser = {
     email: req.body.email,
@@ -38,14 +43,14 @@ exports.signup = (req, res) => {
           })
           .then(idToken => {
             token = idToken;
-            const userCredential = {
+            const userCredentials = {
               handle: newUser.handle,
               email: newUser.email,
               createdAt: new Date().toISOString(),
               imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
               userId
             };
-            return db.doc(`users/${newUser.handle}`).set(userCredential);
+            return db.doc(`users/${newUser.handle}`).set(userCredentials);
           })
           .then(() => {
             return res.status(201).json({ token });
@@ -61,6 +66,7 @@ exports.signup = (req, res) => {
     });
 };
 
+// Log user in
 exports.login = (req, res) => {
   const user = {
     email: req.body.email,
@@ -92,6 +98,49 @@ exports.login = (req, res) => {
     });
 };
 
+// Add user details
+exports.addUserDetails = (req, res) => {
+  let userDetails = reduceUserDetails(req.body);
+
+  db.doc(`/users/${req.user.handle}`)
+    .update(userDetails)
+    .then(() => {
+      return res.json({ message: "Details added successfully" });
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// Get own user details
+exports.getAuthenticatedUser = (req, res) => {
+  let userData = {};
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        return db
+          .collection("likes")
+          .where("userHandle", "==", req.user.handle)
+          .get();
+      }
+    })
+    .then(data => {
+      userData.likes = [];
+      data.forEach(doc => {
+        userData.likes.push(doc.data());
+      });
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// Upload a profile image for user
 exports.uploadImage = (req, res) => {
   const Busboy = require("busboy");
   const path = require("path");
@@ -104,7 +153,8 @@ exports.uploadImage = (req, res) => {
   let imageToBeUploaded = {};
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-    if (mimetype !== "image/jpeg" && mimetype !== "image/png") {  // 왜 && 인걸까?
+    if (mimetype !== "image/jpeg" && mimetype !== "image/png") {
+      // 왜 && 인걸까?
       return res.status(400).json({ error: "Wrong file type submitted" });
     }
     // my.image.png
