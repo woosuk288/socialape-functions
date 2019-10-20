@@ -17,6 +17,7 @@ let db = {
       userHandle: "user",
       body: "this is the scream body",
       createdAt: "2019-10-17T08:47:08.164Z",
+      userImage: "",
       likeCount: 5,
       commentCount: 2
     }
@@ -26,6 +27,16 @@ let db = {
       userHandle: "user",
       screamId: "63PLVKs3XrgYZ5jZRUHt",
       body: "this is the scream body",
+      createdAt: "2019-10-17T08:47:08.164Z",
+    }
+  ],
+  notifications: [
+    {
+      recipient: 'user',
+      sender: 'john',
+      read : 'true } flase',
+      screamId: "63PLVKs3XrgYZ5jZRUHt",
+      type: 'like | comment',
       createdAt: "2019-10-17T08:47:08.164Z",
     }
   ]
