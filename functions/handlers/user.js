@@ -21,14 +21,13 @@ exports.signup = (req, res) => {
   };
 
   const { errors, valid } = validateSignupData(newUser);
-
-  if (!valid) return res.status(400).json({ errors });
+  if (!valid) return res.status(400).json(errors);
 
   const noImg = "no-img.png";
 
   // TODO validate data
   let token, userId;
-  db.doc(`/user/${newUser.handle}`)
+  db.doc(`/users/${newUser.handle}`)
     .get()
     .then(doc => {
       if (doc.exists) {
@@ -77,7 +76,7 @@ exports.login = (req, res) => {
 
   const { errors, valid } = validateLoginData(user);
 
-  if (!valid) return res.status(400).json({ errors });
+  if (!valid) return res.status(400).json(errors);
 
   firebase
     .auth()
@@ -210,6 +209,7 @@ exports.uploadImage = (req, res) => {
   let imageToBeUploaded = {};
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+    console.log(fieldname, file, filename, encoding, mimetype);
     if (mimetype !== "image/jpeg" && mimetype !== "image/png") {
       // 왜 && 인걸까?
       return res.status(400).json({ error: "Wrong file type submitted" });

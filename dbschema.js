@@ -1,7 +1,7 @@
 let db = {
   users: [
     {
-      user_id: "jR9RV944etT0RsVDIww3Cbpo3TH3",
+      userId: "jR9RV944etT0RsVDIww3Cbpo3TH3",
       email: "user@gmail.com",
       handle: "user",
       createdAt: "2019-10-17T22:25:30.759Z",
@@ -27,17 +27,17 @@ let db = {
       userHandle: "user",
       screamId: "63PLVKs3XrgYZ5jZRUHt",
       body: "this is the scream body",
-      createdAt: "2019-10-17T08:47:08.164Z",
+      createdAt: "2019-10-17T08:47:08.164Z"
     }
   ],
   notifications: [
     {
-      recipient: 'user',
-      sender: 'john',
-      read : 'true } flase',
+      recipient: "user",
+      sender: "john",
+      read: "true | flase",
       screamId: "63PLVKs3XrgYZ5jZRUHt",
-      type: 'like | comment',
-      createdAt: "2019-10-17T08:47:08.164Z",
+      type: "like | comment",
+      createdAt: "2019-10-17T08:47:08.164Z"
     }
   ]
 };

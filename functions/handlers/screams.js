@@ -8,7 +8,7 @@ exports.getAllScreams = (req, res) => {
       let screams = [];
       data.forEach(doc => {
         screams.push({
-          id: doc.id,
+          screamId: doc.id,
           ...doc.data()
           // body.data().body, userHandle, createdAt, commentCount, likeCount, userImage
         });

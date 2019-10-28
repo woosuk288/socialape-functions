@@ -3,7 +3,7 @@ const app = require("express")();
 
 const { db } = require("./util/admin");
 
-const FBAtuh = require("./util/fbAuth");
+const fbAuth = require("./util/fbAuth");
 const {
   getAllScreams,
   postOneScream,
@@ -25,21 +25,21 @@ const {
 
 // Scream routes
 app.get("/screams", getAllScreams);
-app.post("/scream", FBAtuh, postOneScream);
+app.post("/scream", fbAuth, postOneScream);
 app.get("/scream/:screamId", getScream);
-app.delete("/scream/:screamId", FBAtuh, deleteScream);
-app.get("/scream/:screamId/like", FBAtuh, likeScream);
-app.get("/scream/:screamId/unlike", FBAtuh, unlikeScream);
-app.post("/scream/:screamId/comment", FBAtuh, commentOnScream);
+app.delete("/scream/:screamId", fbAuth, deleteScream);
+app.get("/scream/:screamId/like", fbAuth, likeScream);
+app.get("/scream/:screamId/unlike", fbAuth, unlikeScream);
+app.post("/scream/:screamId/comment", fbAuth, commentOnScream);
 
 // users routes
 app.post("/signup", signup);
 app.post("/login", login);
-app.post("/user/image", FBAtuh, uploadImage);
-app.post("/user", FBAtuh, addUserDetails);
-app.get("/user", FBAtuh, getAuthenticatedUser);
+app.post("/user/image", fbAuth, uploadImage);
+app.post("/user", fbAuth, addUserDetails);
+app.get("/user", fbAuth, getAuthenticatedUser);
 app.get("/user/:handle", getUserDetails);
-app.post("/notifications", FBAtuh, markNotificationsRead);
+app.post("/notifications", fbAuth, markNotificationsRead);
 
 exports.api = functions.region("asia-northeast1").https.onRequest(app);
 
