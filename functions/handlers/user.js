@@ -211,7 +211,6 @@ exports.uploadImage = (req, res) => {
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
     console.log(fieldname, file, filename, encoding, mimetype);
     if (mimetype !== "image/jpeg" && mimetype !== "image/png") {
-      // 왜 && 인걸까?
       return res.status(400).json({ error: "Wrong file type submitted" });
     }
     // my.image.png
@@ -225,6 +224,7 @@ exports.uploadImage = (req, res) => {
     file.pipe(fs.createWriteStream(filePath));
   });
   busboy.on("finish", () => {
+    console.log('------------finish--------------')
     admin
       .storage()
       .bucket()
